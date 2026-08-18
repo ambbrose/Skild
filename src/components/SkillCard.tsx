@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { usePostHog } from "posthog-js/react";
 import { ArrowBigDown, ArrowBigUp, Bookmark, Copy, MessageSquare } from "lucide-react";
 import { type JSX, useState } from "react";
 import {
@@ -47,11 +48,17 @@ const getTagIcon = (tag: string) => {
 };
 
 const SkillCard = ({ skill }: { skill: SkillRecord }) => {
+	const posthog = usePostHog();
 	const [isCopied, setIsCopied] = useState(false);
 
 	const handleCopyCommand = async () => {
 		try {
 			await navigator.clipboard.writeText(skill.installCommand);
+			posthog.capture("skill_command_copied", {
+				skill_id: skill.id,
+				category: skill.category,
+				tag_count: skill.tags.length,
+			});
 			setIsCopied(true);
 			setTimeout(() => setIsCopied(false), 2000);
 		} catch (err) {

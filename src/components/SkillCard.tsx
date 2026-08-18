@@ -41,6 +41,7 @@ const getTagIcon = (tag: string) => {
 		api: <FaServer title={tag} />,
 		rest: <FaServer title={tag} />,
 		optimization: <FaBolt title={tag} />,
+		vite: <SiVite title={tag} />,
 	};
 	return tagMap[tag] || <FaBolt title={tag} />;
 };
